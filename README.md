@@ -1,5 +1,9 @@
 # NSW COVID-19 Cloud Functions
 
+[![GitHub license](https://img.shields.io/github/license/nsw-covid19-tracker/functions)](https://github.com/nsw-covid19-tracker/functions/blob/main/LICENSE)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/4e901f973d7c4653be00bd1da452a879)](https://www.codacy.com/gh/nsw-covid19-tracker/functions/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nsw-covid19-tracker/functions&amp;utm_campaign=Badge_Grade)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 This repo contains scripts to fetch NSW COVID-19 data for the [Tracker App](https://www.nswcoviddata.com.au/).
 
 ## Getting Started
