@@ -76,7 +76,7 @@ def main(data, context):
             except KeyError:
                 latitude = float(result["Latitude"])
             try:
-                longitude = float(result["Lon"])
+                longitude = float(result["Lon"].replace(",", ""))
             except KeyError:
                 longitude = float(result["Longitude"])
 
@@ -118,7 +118,10 @@ def get_datetimes(result):
     datetimes = []
     dates = split_datetimes(result["Date"], is_date=True)
 
-    if result["Time"] == "Strength and Conditioning Class":
+    if (
+        result["Time"] == "Strength and Conditioning Class"
+        or result["Time"] == "Strength and Conditioning Class to "
+    ):
         times = [""]
     else:
         times = split_datetimes(result["Time"])
