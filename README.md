@@ -10,7 +10,7 @@ This repo contains scripts to fetch NSW COVID-19 data for the [Tracker App](http
 
 ### Setup Firebase
 
-Create a new project on Firebase.
+Create a new project on Firebase and enable Realtime Database by going into the corresponding tab.
 
 Then create a service account by going into Settings > Project settings > Service accounts > Firebase Admin SDK > Generate new private key. Rename the file to `keyfile.json` and place it under `functions/`.
 
