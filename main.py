@@ -2,6 +2,7 @@ import arrow
 import firebase_admin
 import re
 import requests
+import string
 import sys
 
 from firebase_admin import credentials, db
@@ -35,6 +36,8 @@ def main(data, context):
     data = json["data"]
     data_updated_at = arrow.get(json["date"], "YYYY-MM-DD")
     updated_keys = set()
+    added_postcodes_suburbs = set()
+    printable = set(string.printable)
 
     for key in data:
         for result in data[key]:
@@ -45,6 +48,7 @@ def main(data, context):
 
             venue = result["Venue"]
             suburb = result["Suburb"]
+            suburb = "".join(filter(lambda x: x in printable, suburb))
             postcode = re.search(r"\d{4}", address.split(", ")[-1])
 
             if suburb == "Avalon":
@@ -67,8 +71,12 @@ def main(data, context):
                             f"failed to retrieve postcode for '{suburb}'"
                         )
 
-            if postcode is not None:
+            if (
+                postcode is not None
+                and (postcode, suburb) not in added_postcodes_suburbs
+            ):
                 postcode = utils.add_suburb(suburbs_dict, postcode, suburb)
+                added_postcodes_suburbs.add((postcode, suburb))
 
             datetimes = get_datetimes(result)
             try:
