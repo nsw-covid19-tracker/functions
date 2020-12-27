@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Deploy function for fetching data
 gcloud functions deploy fetch-data \
     --entry-point main \
@@ -6,7 +8,7 @@ gcloud functions deploy fetch-data \
     --trigger-event google.pubsub.topic.publish \
     --ingress-settings internal-only \
     --memory 128MB \
-    --timeout 180s
+    --timeout 300s
 
 # Schedule data fetch
 gcloud scheduler jobs create pubsub daily_scrape \
