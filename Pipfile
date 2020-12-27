@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+arrow = ">=0.17.0"
+firebase-admin = ">=4.4.0"
+loguru = ">=0.5.3"
+requests = ">=2.24.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
