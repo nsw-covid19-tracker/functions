@@ -41,12 +41,17 @@ def main(data, context):
 
     for key in data:
         for result in data[key]:
-            try:
-                address = result["Address"]
-            except KeyError:
-                address = result["Adress"]
-
             venue = result["Venue"]
+            if "Address" in result:
+                address = result["Address"]
+            elif "Adress" in result:
+                address = result["Adress"]
+            else:
+                if venue == "BWS Berala":
+                    address = "15-16 Woodburn Rd, Berala, NSW 2141"
+                else:
+                    raise KeyError
+
             suburb = result["Suburb"]
             suburb = "".join(filter(lambda x: x in printable, suburb))
             postcode = re.search(r"\d{4}", address.split(", ")[-1])
