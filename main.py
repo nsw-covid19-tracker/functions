@@ -60,6 +60,8 @@ def main(data, context):
                 suburb = "Avalon Beach"
             elif venue == "Warriewood Square" and suburb == "Nails":
                 suburb = "Warriewood"
+            elif suburb == "Paramatta":
+                suburb = "Parramatta"
 
             if postcode is not None:
                 postcode = postcode[0]
