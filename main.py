@@ -42,6 +42,9 @@ def main(data, context):
     for key in data:
         for result in data[key]:
             venue = result["Venue"]
+            if not venue:
+                continue
+
             if "Address" in result:
                 address = result["Address"]
             elif "Adress" in result:
