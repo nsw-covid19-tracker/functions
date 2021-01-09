@@ -56,7 +56,7 @@ def main(data, context):
             suburb = "".join(filter(lambda x: x in printable, suburb))
             postcode = re.search(r"\d{4}", address.split(", ")[-1])
 
-            if suburb == "Avalon":
+            if suburb in ["Avalon", "Avalon beach"]:
                 suburb = "Avalon Beach"
             elif venue == "Warriewood Square" and suburb == "Nails":
                 suburb = "Warriewood"
