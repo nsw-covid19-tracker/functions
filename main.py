@@ -55,7 +55,7 @@ def main(data, context):
                 else:
                     raise KeyError
 
-            suburb = result["Suburb"]
+            suburb = result["Suburb"].strip()
             suburb = "".join(filter(lambda x: x in printable, suburb))
             postcode = re.search(r"\d{4}", address.split(", ")[-1])
 
