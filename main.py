@@ -65,6 +65,10 @@ def main(data, context):
                 suburb = "Warriewood"
             elif suburb == "Paramatta":
                 suburb = "Parramatta"
+            elif suburb == "Campsie Hills":
+                suburb = "Campsie"
+            elif suburb == "Brookevale":
+                suburb = "Brookvale"
 
             if postcode is not None:
                 postcode = postcode[0]
