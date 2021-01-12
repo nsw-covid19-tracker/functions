@@ -1,12 +1,13 @@
-import arrow
-import firebase_admin
 import re
-import requests
 import string
 import sys
 
+import arrow
+import firebase_admin
+import requests
 from firebase_admin import credentials, db
 from loguru import logger
+from typing import Set
 
 import utils
 
@@ -45,26 +46,9 @@ def main(data, context):
             if not venue:
                 continue
 
-            if "Address" in result:
-                address = result["Address"]
-            elif "Adress" in result:
-                address = result["Adress"]
-            else:
-                if venue == "BWS Berala":
-                    address = "15-16 Woodburn Rd, Berala, NSW 2141"
-                else:
-                    raise KeyError
-
-            suburb = result["Suburb"].strip()
-            suburb = "".join(filter(lambda x: x in printable, suburb))
+            address = get_address(result, venue)
+            suburb = get_suburb(result, printable, venue)
             postcode = re.search(r"\d{4}", address.split(", ")[-1])
-
-            if suburb in ["Avalon", "Avalon beach"]:
-                suburb = "Avalon Beach"
-            elif venue == "Warriewood Square" and suburb == "Nails":
-                suburb = "Warriewood"
-            elif suburb == "Paramatta":
-                suburb = "Parramatta"
 
             if postcode is not None:
                 postcode = postcode[0]
@@ -120,6 +104,39 @@ def main(data, context):
             "casesUpdatedAt": datetime_milliseconds(arrow.utcnow()),
         }
     )
+
+
+def get_address(result: dict, venue: str) -> str:
+    address = None
+    if "Address" in result:
+        address = result["Address"]
+    elif "Adress" in result:
+        address = result["Adress"]
+    else:
+        if venue == "BWS Berala":
+            address = "15-16 Woodburn Rd, Berala, NSW 2141"
+        else:
+            raise KeyError
+
+    return address
+
+
+def get_suburb(result: dict, printable: Set[str], venue: str) -> str:
+    suburb = result["Suburb"].strip()
+    suburb = "".join(filter(lambda x: x in printable, suburb))
+
+    if suburb in ["Avalon", "Avalon beach"]:
+        suburb = "Avalon Beach"
+    elif venue == "Warriewood Square" and suburb == "Nails":
+        suburb = "Warriewood"
+    elif suburb == "Paramatta":
+        suburb = "Parramatta"
+    elif suburb == "Campsie Hills":
+        suburb = "Campsie"
+    elif suburb == "Brookevale":
+        suburb = "Brookvale"
+
+    return suburb
 
 
 def get_postcode_from_dict(suburb, suburbs_dict):
