@@ -242,7 +242,10 @@ def parse_datetime(datetime_str):
     if datetime is None:
         raise ValueError(f"Failed to parse {datetime_str}")
 
-    return datetime.replace(year=2020)
+    if datetime.year < 2020:
+        datetime = datetime.replace(year=arrow.utcnow().year)
+
+    return datetime
 
 
 def datetime_milliseconds(datetime):
