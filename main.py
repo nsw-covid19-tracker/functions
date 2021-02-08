@@ -135,6 +135,10 @@ def get_suburb(result: dict, printable: Set[str], venue: str) -> str:
         suburb = "Campsie"
     elif suburb == "Brookevale":
         suburb = "Brookvale"
+    elif suburb == "Brighton Le Sands":
+        suburb = "Brighton-Le-Sands"
+    elif suburb == "Madden Plains":
+        suburb = "Maddens Plains"
 
     return suburb
 
