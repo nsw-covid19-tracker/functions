@@ -107,16 +107,13 @@ def main(data, context):
 
 
 def get_address(result: dict, venue: str) -> str:
-    address = None
+    address = ""
     if "Address" in result:
         address = result["Address"]
     elif "Adress" in result:
         address = result["Adress"]
-    else:
-        if venue == "BWS Berala":
-            address = "15-16 Woodburn Rd, Berala, NSW 2141"
-        else:
-            raise KeyError
+    elif venue == "BWS Berala":
+        address = "15-16 Woodburn Rd, Berala, NSW 2141"
 
     return address
 
