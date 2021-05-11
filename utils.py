@@ -43,7 +43,7 @@ def add_suburb(suburbs_dict, postcode, suburb):
             }
         )
         logs_ref = db.reference("logs")
-        logs_ref.update({"suburbsUpdatedAt": int(arrow.utcnow().timestamp * 1000)})
+        logs_ref.update({"suburbsUpdatedAt": int(arrow.utcnow().int_timestamp * 1000)})
 
     return postcode
 

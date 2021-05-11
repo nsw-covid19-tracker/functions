@@ -250,7 +250,7 @@ def parse_datetime(datetime_str):
 
 
 def datetime_milliseconds(datetime):
-    return int(datetime.timestamp * 1000)
+    return int(datetime.int_timestamp * 1000)
 
 
 def update_expired_cases(updated_keys):
