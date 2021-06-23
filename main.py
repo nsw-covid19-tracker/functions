@@ -1,13 +1,15 @@
+import codecs
+import json
 import re
 import string
 import sys
+from typing import Set
 
 import arrow
 import firebase_admin
 import requests
 from firebase_admin import credentials, db
 from loguru import logger
-from typing import Set
 
 import utils
 
@@ -33,9 +35,10 @@ def main(data, context):
         "0a52e6c1-bc0b-48af-8b45-d791a6d8e289/resource/"
         "f3a28eed-8c2a-437b-8ac1-2dab3cf760f9/download/venue-data.json"
     )
-    json = r.json()
-    data = json["data"]
-    data_updated_at = arrow.get(json["date"], "YYYY-MM-DD")
+
+    res_json = json.loads(codecs.decode(r.content, "utf-8-sig"))
+    data = res_json["data"]
+    data_updated_at = arrow.get(res_json["date"], "YYYY-MM-DD")
     updated_keys = set()
     added_postcodes_suburbs = set()
     printable = set(string.printable)
@@ -74,7 +77,7 @@ def main(data, context):
 
             datetimes = get_datetimes(result)
             try:
-                latitude = float(result["Lat"])
+                latitude = float(result["Lat"].strip().strip(","))
             except KeyError:
                 latitude = float(result["Latitude"])
             try:
@@ -136,6 +139,8 @@ def get_suburb(result: dict, printable: Set[str], venue: str) -> str:
         suburb = "Brighton-Le-Sands"
     elif suburb == "Madden Plains":
         suburb = "Maddens Plains"
+    elif suburb == "Bondi North":
+        suburb = "North Bondi"
 
     return suburb
 
