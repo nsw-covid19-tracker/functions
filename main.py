@@ -1,9 +1,7 @@
-import codecs
-import json
 import re
 import string
 import sys
-from typing import Set
+from typing import Dict, Set
 
 import arrow
 import firebase_admin
@@ -36,7 +34,7 @@ def main(data, context):
         "f3a28eed-8c2a-437b-8ac1-2dab3cf760f9/download/venue-data.json"
     )
 
-    res_json = json.loads(codecs.decode(r.content, "utf-8-sig"))
+    res_json = r.json()
     data = res_json["data"]
     data_updated_at = arrow.get(res_json["date"], "YYYY-MM-DD")
     updated_keys = set()
@@ -76,15 +74,7 @@ def main(data, context):
                 added_postcodes_suburbs.add((postcode, suburb))
 
             datetimes = get_datetimes(result)
-            try:
-                latitude = float(result["Lat"].strip().strip(","))
-            except KeyError:
-                latitude = float(result["Latitude"])
-            try:
-                longitude = float(result["Lon"].replace(",", ""))
-            except KeyError:
-                longitude = float(result["Longitude"])
-
+            latitude, longitude = get_lat_lng(venue, address, suburb, result)
             case_dict = {
                 "postcode": postcode,
                 "suburb": suburb,
@@ -141,6 +131,8 @@ def get_suburb(result: dict, printable: Set[str], venue: str) -> str:
         suburb = "Maddens Plains"
     elif suburb == "Bondi North":
         suburb = "North Bondi"
+    elif suburb == "East Sydney":
+        suburb = "Kings Cross"
 
     return suburb
 
@@ -256,6 +248,43 @@ def parse_datetime(datetime_str):
 
 def datetime_milliseconds(datetime):
     return int(datetime.int_timestamp * 1000)
+
+
+def get_lat_lng(venue: str, address: str, suburb: str, result: Dict):
+    latitude = longitude = None
+    try:
+        try:
+            latitude = float(result["Lat"].strip().strip(","))
+        except KeyError:
+            latitude = float(result["Latitude"])
+        try:
+            longitude = float(result["Lon"].replace(",", ""))
+        except KeyError:
+            longitude = float(result["Longitude"])
+    except ValueError:
+        if (
+            venue == "Great Ocean Foods"
+            and address == "5/11 Cadogan Street"
+            and suburb == "Marrickville"
+        ):
+            latitude = -33.91103063154654
+            longitude = 151.16532982470434
+        elif (
+            venue == "Cheers Bar & Grill Sydney"
+            and address == "561 George Street"
+            and suburb == "Sydney"
+        ):
+            latitude = -33.87645071753783
+            longitude = 151.2058465400148
+        elif (
+            venue == "Paloma Espresso Caf� "
+            and address == "Shop 1 Ground floor 10 Shelley Street"
+            and suburb == "Sydney"
+        ):
+            latitude = -33.865671155398616
+            longitude = 151.2029531147945
+
+    return latitude, longitude
 
 
 def update_expired_cases(updated_keys):
